@@ -1,0 +1,5 @@
+/credentials.json
+/wakatime-venv
+/.vscode
+/token.pickle
+/__pycache__

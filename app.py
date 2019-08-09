@@ -14,10 +14,37 @@ def main():
 def get_wakatime_data(messages):
     data = {}
     for msg in messages:
-        body = msg["body"]
+        body = str(msg["body"])  # save body to variable
+
+        # save variable to keep track of which part of the body that has useful data
+        active_section = None
+
+        #  separate lines to easier handle data
+        for line in body.split('\n'):
+            line = line.strip()  # remove spaces
+
+            if line == "Projects:":
+                active_section = line[:-1]
+            elif line == "Languages:":
+                active_section = line[:-1]
+            elif line == "Editors:":
+                active_section = line[:-1]
+            elif line == "Operating Systems:":
+                active_section = line[:-1]
+            elif line == "Categories:":
+                active_section = line[:-1]
+            elif line == "Machines:":
+                active_section = line[:-1]
+            elif line == "":
+                active_section = None
+
+            if active_section:
+                print(line)
+
+                # https://stackoverflow.com/questions/10663720/converting-a-time-string-to-seconds-in-python
 
     return data
-    
+
 
 if __name__ == "__main__":
     main()

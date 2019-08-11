@@ -1,5 +1,6 @@
 from credentials import get_service
 from messages import fetch_messages
+from pprint import pprint
 
 
 def main():
@@ -9,36 +10,49 @@ def main():
 
 
 def get_wakatime_data(messages):
-    data = {}
+    data = []
+
     for msg in messages:
         body = str(msg["body"])  # save body to variable
+        message_data = {}  # init dict to store message data
 
         # save variable to keep track of which part of the body that has useful data
         active_section = None
+        sections = ["Projects:", "Languages:", "Editors:",
+                    "Operating Systems:", "Categories:", "Machines:"]
+
+        # add a dictionary for each section
+        for section in sections:
+            message_data[section[:-1]] = {}
 
         #  separate lines to easier handle data
         for line in body.split('\n'):
             line = line.strip()  # remove spaces
 
-            if line == "Projects:":
+            # search for sections with useful data
+
+            # mark line of information with section and exclude the actual section name
+            if line in sections:
                 active_section = line[:-1]
-            elif line == "Languages:":
-                active_section = line[:-1]
-            elif line == "Editors:":
-                active_section = line[:-1]
-            elif line == "Operating Systems:":
-                active_section = line[:-1]
-            elif line == "Categories:":
-                active_section = line[:-1]
-            elif line == "Machines:":
-                active_section = line[:-1]
+                continue
             elif line == "":
                 active_section = None
 
+            # handle information on useful sections
             if active_section:
-                print(line)
 
-                # https://stackoverflow.com/questions/10663720/converting-a-time-string-to-seconds-in-python
+                # split name and time
+                parts = line.split(" : ")
+                name = parts[0]
+                time = parts[1]
+
+                # ! Handle time with (time = time.strptime("01:05:22", "%H:%M:%S")) ?
+
+                message_data[active_section].update({name: time})
+
+    pprint(message_data)  # debug print
+
+    # https://stackoverflow.com/questions/10663720/converting-a-time-string-to-seconds-in-python
     return data
 
 

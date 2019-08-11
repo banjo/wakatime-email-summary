@@ -8,6 +8,7 @@ import time
 
 def fetch_messages(service):
     print("Fetching mail IDs...")
+
     # get all messages
     response = service.users().messages().list(
         userId='me', q="subject:(WakaTime Weekly)", maxResults=1000).execute()
@@ -18,10 +19,11 @@ def fetch_messages(service):
         messages.extend(response["messages"])
 
     print("Fetching mails...")
+
     # get each message and add to list
     final_messages = []
     for i, message in enumerate(messages):
-        print(f'{i + 1}/{len(messages)}')
+        print(f'Getting mail {i + 1}/{len(messages)}...')
 
         msg_id = message["id"]  # get id of message
         msg = service.users().messages().get(

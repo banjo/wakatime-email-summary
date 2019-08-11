@@ -6,11 +6,11 @@ from bs4 import BeautifulSoup
 import time
 
 
-def fetch_messages(service, label):
+def fetch_messages(service):
     print("Fetching mail IDs...")
     # get all messages
     response = service.users().messages().list(
-        userId='me', labelIds=[label["id"]], maxResults=1000).execute()
+        userId='me', q="subject:(WakaTime Weekly)", maxResults=1000).execute()
 
     # add them to a list
     messages = []
@@ -31,6 +31,7 @@ def fetch_messages(service, label):
         final_messages.append(msg_json)
 
     return final_messages
+
 
 def decode_message(msg):
     temp_dict = {}
